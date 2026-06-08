@@ -1,0 +1,43 @@
+pipeline {
+agent any
+
+stages {
+
+    stage('Checkout Code') {
+        steps {
+            git branch: 'main',
+                url: 'https://github.com/prasadkelkar2003/jenkins-public.git'
+        }
+    }
+
+    stage('Verify Files') {
+        steps {
+            sh 'pwd'
+            sh 'ls -la'
+        }
+    }
+
+    stage('Build Docker Image') {
+        steps {
+            sh 'docker build -t jenkins-public .'
+        }
+    }
+
+    stage('List Docker Images') {
+        steps {
+            sh 'docker images'
+        }
+    }
+}
+
+post {
+    success {
+        echo 'Application deployed successfully'
+    }
+
+    failure {
+        echo 'Pipeline failed'
+    }
+}
+
+}
